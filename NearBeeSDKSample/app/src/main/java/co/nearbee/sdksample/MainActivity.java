@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
 
     @Override
     public void onUpdate(ArrayList<NearBeeBeacon> beaconsInRange) {
-        Log.e("sdk", "Found " + beaconsInRange.size() + " beacons");
         if (adapter == null) {
             this.beacons = new ArrayList<>(beaconsInRange);
             adapter = new ListAdapter(this.beacons);
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
 
     @Override
     public void onBeaconLost(ArrayList<NearBeeBeacon> lost) {
-        Log.e("sdk", "Lost " + lost.size() + " beacons");
         if (adapter != null) {
             for (NearBeeBeacon beacon : lost) {
                 beacons.remove(beacon);
@@ -71,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
 
     @Override
     public void onBeaconFound(ArrayList<NearBeeBeacon> found) {
-        for (NearBeeBeacon beacon : found) {
-            Log.e("sdk", "Found " + beacon.getNotification().getTitle());
-        }
         if (adapter != null) {
             for (NearBeeBeacon beacon : found) {
                 if (!beacons.contains(beacon))
@@ -85,6 +80,6 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
 
     @Override
     public void onError(NearBeeException exception) {
-        Log.e("sdk", "Error: " + exception.getMessage());
+        Log.e("NearBee SDK", "Error: " + exception.getMessage());
     }
 }
