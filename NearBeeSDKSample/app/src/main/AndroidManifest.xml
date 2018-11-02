@@ -17,8 +17,13 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="co.nearbee.api_key"
-            android:value="MY_DEV_TOKEN"/>
+        <meta-data
+            android:name="co.nearbee.api_key"
+            android:value="YOUR_API_KEY" />
+
+        <meta-data
+            android:name="co.nearbee.organization_id"
+            android:value="123" />
 
     </application>
 

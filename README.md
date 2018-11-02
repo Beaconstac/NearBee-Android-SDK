@@ -38,7 +38,7 @@ NearBee requires the location permission to scan for Beacons.
 
 ## Usage
 
-#### 1. Add your API key to the `AndroidManifest.xml` as follows
+#### 1. Add your API key and Orgnization ID to the `AndroidManifest.xml` as follows
 
 ```xml
 <application>
@@ -47,6 +47,10 @@ NearBee requires the location permission to scan for Beacons.
     <meta-data
         android:name="co.nearbee.api_key"
         android:value="MY_DEV_TOKEN" />
+
+    <meta-data
+        android:name="co.nearbee.organization_id"
+        android:value="123" />
 …
 …
 </application>
