@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data android:name="co.nearbee.api_key"
+            android:value="MY_DEV_TOKEN"/>
+
     </application>
 
 </manifest>
