@@ -9,7 +9,7 @@ You will need an API key for the NearBee SDK service to work.
 ```groovy
 dependencies {
     ...
-    implementation 'co.nearbee:nearbeesdk:1.0.2'
+    implementation 'co.nearbee:nearbeesdk:1.0.3'
 }
 ```
 
@@ -106,4 +106,10 @@ nearBee.startScanning(new NearBeeListener() {
 // Stop scanning 
 nearBee.stopScanning();
 // Should ideally be done when the app goes to the background
+```
+
+#### 4. Changing background notification state
+```java
+// Change background notification state after initialization
+nearBee.enableBackgroundNotifications(true);
 ```
