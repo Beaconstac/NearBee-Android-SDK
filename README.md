@@ -9,7 +9,7 @@ You will need an API key for the NearBee SDK service to work.
 ```groovy
 dependencies {
     ...
-    implementation 'co.nearbee:nearbeesdk:1.0.4'
+    implementation 'co.nearbee:nearbeesdk:1.1.0'
 }
 ```
 
@@ -112,4 +112,23 @@ nearBee.stopScanning();
 ```java
 // Change background notification state after initialization
 nearBee.enableBackgroundNotifications(true);
+```
+
+#### 5. Clear local beacon cache
+```java
+// This clears the cache and forces the server to re-fetch beacon notifications
+nearBee.clearNotificationCache();
+```
+
+### Getting notification data from the Beacon object
+
+```java
+// Notification title
+nearBeeBeacon.getNotification().getTitle();
+// Notification description
+nearBeeBeacon.getNotification().getDescription();
+// Notification url
+nearBeeBeacon.getNotification().getEddystoneURL();
+// Notification icon url
+nearBeeBeacon.getNotification().getIcon();
 ```
