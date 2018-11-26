@@ -54,9 +54,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BeaconViewHold
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(beacon.getNotification().getDescription()));
-                viewHolder.icon.getContext().startActivity(i);
+                beacon.launchUrl(view.getContext());
             }
         });
     }

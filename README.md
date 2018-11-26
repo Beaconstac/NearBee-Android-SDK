@@ -8,8 +8,8 @@ You will need an API key for the NearBee SDK service to work.
 
 ```groovy
 dependencies {
-    ...
-    implementation 'co.nearbee:nearbeesdk:1.1.0'
+    …
+    implementation 'co.nearbee:nearbeesdk:1.1.1'
 }
 ```
 
@@ -131,4 +131,9 @@ nearBeeBeacon.getNotification().getDescription();
 nearBeeBeacon.getNotification().getEddystoneURL();
 // Notification icon url
 nearBeeBeacon.getNotification().getIcon();
+```
+
+### Launch the url associated with the beacon
+```java
+nearBeeBeacon.launchUrl(getApplicationContext());
 ```
