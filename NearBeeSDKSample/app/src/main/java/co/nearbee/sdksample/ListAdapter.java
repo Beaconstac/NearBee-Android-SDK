@@ -1,7 +1,5 @@
 package co.nearbee.sdksample;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
