@@ -9,7 +9,7 @@ You will need an API key for the NearBee SDK service to work.
 ```groovy
 dependencies {
     …
-    implementation 'co.nearbee:nearbeesdk:1.1.7'
+    implementation 'co.nearbee:nearbeesdk:2.0.0'
 }
 ```
 
@@ -78,19 +78,20 @@ Sets the time between callbacks for displaying beacon notifications in the foreg
 #### 3. Displaying available beacon notifications in Application UI
 ```java
 // Start scanning and get updates
-nearBee.startScanning(new NearBeeListener() {
+nearBee.startScanning(new NearBeaconListener() {
+
     @Override
-    public void onUpdate(ArrayList<NearBeeBeacon> beaconsInRange) {
+    public void onUpdate(ArrayList<NearBeacon> beaconsInRange) {
         // An updated list of beacons currently in range
     }
 
     @Override
-    public void onBeaconLost(ArrayList<NearBeeBeacon> lostBeacons) {
+    public void onBeaconLost(ArrayList<NearBeacon> lostBeacons) {
         // List of beacons that went out of range
     }
 
     @Override
-    public void onBeaconFound(ArrayList<NearBeeBeacon> foundBeacons) {
+    public void onBeaconFound(ArrayList<NearBeacon> foundBeacons) {
         // List of beacons that appeared after last update
     }
 
@@ -120,20 +121,142 @@ nearBee.enableBackgroundNotifications(true);
 nearBee.clearNotificationCache();
 ```
 
-### Getting notification data from the Beacon object
+### Getting attachment data from the Beacon object
+
+There are two types of attachments -
+
+#### PhysicalWeb
+These are extracted from the physical web url of the beacon
+```java
+beacon.getAttachments().getPhysicalWebAttachment();
+```
+PhysicalWeb properties
 
 ```java
-// Notification title
-nearBeeBeacon.getNotification().getTitle();
-// Notification description
-nearBeeBeacon.getNotification().getDescription();
-// Notification url
-nearBeeBeacon.getNotification().getEddystoneURL();
-// Notification icon url
-nearBeeBeacon.getNotification().getIcon();
+// Title
+physicalWeb.getTitle();
+// Description
+physicalWeb.getDescription();
+// Url for the icon
+physicalWeb.getIconURL();
+// Physical web url
+physicalWeb.getUrl();
+// Returns if the url is currexntly active
+physicalWeb.isActive();
+```
+
+#### ProximityAttachment
+This comes from Google Nearby attachment for a specific beacon
+```java
+// returns a list of ProximityAttachment objects
+beacon.getAttachments().getProximityApiAttachments();
+```
+ProximityAttachment properties
+
+In addition to all the properties from physical web, ProximityAttachment has extra properties
+```java
+// Url for banner image
+proximityAttachment.getBannerImageURL();
+// Banner type, portrait = 1 or landscape = 2
+proximityAttachment.getBannerType();
+// ISO code for the language
+proximityAttachment.getLanguage();
+```
+
+### Convenience methods for getting attachments
+Get the `ProximityAttachment` for the current device locale language.
+##### getAttachmentForCurrentLanguage()
+Will return `null` if ProximityAttachment is not available for that language
+```java
+beacon.getAttachmentForCurrentLanguage(context);
+```
+##### getBestAvailableAttachment()
+Returns a `BeaconAttachment` object, which will be a `ProximityAttachment` if an attachment is found for the current language, or a `PhysicalWeb` otherwise
+
+Will return `null` if no attachments are present for this beacon
+```java
+beacon.getBestAvailableAttachment(context);
 ```
 
 ### Launch the url associated with the beacon
 ```java
-nearBeeBeacon.launchUrl(context);
+// BeaconAttachment is the base class for both ProximityAttachment and PhysicalWeb
+beacon.launchUrl(context, beaconAttachment);
+```
+
+### Getting business data from the Beacon object
+Beacons may contain a Business object which is the `Place` associated with the beacon
+```java
+Business business = beacon.getBusiness();
+```
+They have following properties
+```java
+// Color associated with the place (int)
+business.getColor();
+// Color code associated with the place (Hex code)
+business.getColorCode();
+// Cover image url
+business.getCoverURL();
+// Google place id
+business.getGooglePlaceID();
+// Place name
+business.getName();
+// Icon image url
+business.getIconURL();
+```
+
+
+### Overriding notification on-click behaviour
+
+##### 1. Add a class which extends NotificationManager
+
+```java
+package com.your_app_package;
+
+import android.content.Context;
+import android.content.Intent;
+
+import co.nearbee.NotificationManager;
+import co.nearbee.models.BeaconAttachment;
+import co.nearbee.models.NearBeacon;
+
+
+public class MyNotificationManager extends NotificationManager {
+
+    public MyNotificationManager(Context context) {
+        super(context);
+    }
+
+    @Override
+    public Intent getAppIntent(Context context) {
+        // This intent is for handling grouped notification click
+        return new Intent(context, MainActivity.class);
+    }
+
+    @Override
+    public Intent getBeaconIntent(Context context, NearBeacon nearBeacon) {
+        // This intent is for handling individual notification click
+        // Pass the intent of the activity that you want to be opened on click
+        if (nearBeacon.getBusiness() != null) {
+            BeaconAttachment attachment = nearBeacon.getBestAvailableAttachment(context);
+            if (attachment != null) {
+                final Intent intent = new Intent(context, MainActivity.class);
+                // pass the url from the beacon, so that it can be opened from your activity
+                intent.putExtra("url", attachment.getUrl());
+                return intent;
+            }
+        }
+        return null;
+    }
+
+}
+
+```
+
+##### 2. Add this metadata to your `AndroidManifest.xml`
+
+```xml
+<meta-data
+    android:name="co.nearbee.notification_util"
+    android:value=".MyNotificationManager" />
 ```

@@ -12,7 +12,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import co.nearbee.NearBeeBeacon;
+import co.nearbee.models.BeaconAttachment;
+import co.nearbee.models.NearBeacon;
 
 /**
  * Copyright (C) 2018 Mobstac, Inc.
@@ -23,9 +24,9 @@ import co.nearbee.NearBeeBeacon;
  */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BeaconViewHolder> {
 
-    private ArrayList<NearBeeBeacon> beacons;
+    private ArrayList<NearBeacon> beacons;
 
-    ListAdapter(ArrayList<NearBeeBeacon> beacons) {
+    ListAdapter(ArrayList<NearBeacon> beacons) {
         this.beacons = beacons;
     }
 
@@ -42,17 +43,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BeaconViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final BeaconViewHolder viewHolder, int i) {
-        final NearBeeBeacon beacon = beacons.get(i);
-        viewHolder.title.setText(beacon.getNotification().getTitle());
-        viewHolder.description.setText(beacon.getNotification().getDescription());
-        viewHolder.link.setText(beacon.getNotification().getEddystoneURL());
+        final NearBeacon beacon = beacons.get(i);
+        final BeaconAttachment attachment = beacon.getBestAvailableAttachment(viewHolder.itemView.getContext());
+        viewHolder.title.setText(attachment.getTitle());
+        viewHolder.description.setText(attachment.getDescription());
+        viewHolder.link.setText(attachment.getUrl());
         Glide.with(viewHolder.icon.getContext())
-                .load(beacon.getNotification().getIcon())
+                .load(attachment.getIconURL())
                 .into(viewHolder.icon);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                beacon.launchUrl(view.getContext());
+                beacon.launchUrl(view.getContext(), attachment);
             }
         });
     }

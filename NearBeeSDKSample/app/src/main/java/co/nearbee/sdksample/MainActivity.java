@@ -17,18 +17,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import co.nearbee.NearBeaconListener;
 import co.nearbee.NearBee;
-import co.nearbee.NearBeeBeacon;
 import co.nearbee.NearBeeException;
-import co.nearbee.NearBeeListener;
+import co.nearbee.models.NearBeacon;
 
-public class MainActivity extends AppCompatActivity implements NearBeeListener {
+public class MainActivity extends AppCompatActivity implements NearBeaconListener {
 
     private static final int REQUEST_LOCATION_PERMISSION = 2453;
     NearBee nearBee;
     ListAdapter adapter;
     RecyclerView recyclerView;
-    ArrayList<NearBeeBeacon> beacons;
+    ArrayList<NearBeacon> beacons;
     TextView errorText;
     ProgressBar progressBar;
 
@@ -69,11 +69,10 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
         if (!nearBee.isScanning())
             nearBee.startScanning(this);
         nearBee.enableBackgroundNotifications(true);
-        nearBee.enableNotificationDebugMode(true);
     }
 
     @Override
-    public void onUpdate(ArrayList<NearBeeBeacon> beaconsInRange) {
+    public void onUpdate(ArrayList<NearBeacon> beaconsInRange) {
         progressBar.setVisibility(View.INVISIBLE);
         if (adapter == null) {
             this.beacons = new ArrayList<>(beaconsInRange);
@@ -92,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
     }
 
     @Override
-    public void onBeaconLost(ArrayList<NearBeeBeacon> lost) {
+    public void onBeaconLost(ArrayList<NearBeacon> lost) {
         if (adapter != null) {
-            for (NearBeeBeacon beacon : lost) {
+            for (NearBeacon beacon : lost) {
                 beacons.remove(beacon);
             }
             adapter.notifyDataSetChanged();
@@ -102,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements NearBeeListener {
     }
 
     @Override
-    public void onBeaconFound(ArrayList<NearBeeBeacon> found) {
+    public void onBeaconFound(ArrayList<NearBeacon> found) {
         if (adapter != null) {
-            for (NearBeeBeacon beacon : found) {
+            for (NearBeacon beacon : found) {
                 if (!beacons.contains(beacon))
                     beacons.add(beacon);
             }
