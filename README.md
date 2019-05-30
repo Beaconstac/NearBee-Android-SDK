@@ -9,7 +9,7 @@ You will need an API key for the NearBee SDK service to work.
 ```groovy
 dependencies {
     …
-    implementation 'co.nearbee:nearbeesdk:2.0.0'
+    implementation 'co.nearbee:nearbeesdk:2.0.1'
 }
 ```
 
