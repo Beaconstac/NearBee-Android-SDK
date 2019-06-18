@@ -22,7 +22,7 @@ allprojects {
 ```groovy
 dependencies {
     …
-    implementation 'co.nearbee:nearbeesdk:2.1.4'
+    implementation 'co.nearbee:nearbeesdk:2.1.5'
 }
 ```
 
@@ -219,7 +219,7 @@ business.getIconURL();
 ```
 
 
-### Overriding notification on-click behaviour
+### Overriding beacon notification on-click behaviour
 
 ##### 1. Add a class which extends NotificationManager
 
@@ -314,3 +314,55 @@ nearBee.stopGeoFenceMonitoring().setSuccessListener(new SuccessListener<Void>() 
 ```java
 boolean enabled = nearBee.isGeoFenceMonitoringEnabled();
 ```
+
+### Overriding GeoFence notification on-click behaviour
+
+##### 1. Add a class which extends NotificationManager
+
+```java
+package com.your_app_package;
+
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.Nullable;
+
+import co.nearbee.geofence.GeoAttachment;
+import co.nearbee.geofence.GeoNotificationManager;
+import co.nearbee.geofence.repository.models.GeoFence;
+
+public class MyGeoNotificationManager extends GeoNotificationManager {
+
+    public MyGeoNotificationManager(Context context) {
+        super(context);
+    }
+
+    @Nullable
+    @Override
+    public Intent getGeoFenceIntent(Context context, GeoFence geoFence) {
+        GeoAttachment attachment = geoFence.getAttachment();
+        if (attachment != null) {
+            final Intent intent = new Intent(context, MyActivity.class);
+            // pass the url from the beacon, so that it can be opened from your activity
+            intent.putExtra("url", attachment.getUrl());
+            return intent;
+        }
+        return null;
+    }
+
+    @Override
+    public Intent getAppIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+
+}
+
+```
+
+##### 2. Add this metadata to your `AndroidManifest.xml`
+
+```xml
+<meta-data
+    android:name="co.nearbee.geo_notification_util"
+    android:value=".MyGeoNotificationManager" />
+```
+
