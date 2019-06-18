@@ -4,12 +4,25 @@ You will need an API key for the NearBee SDK service to work.
 
 ## Integration with your existing project in Android Studio
 
+### Add this to your project level build.gradle
+```groovy
+allprojects {
+    repositories {
+        …
+        maven {
+            url  "https://dl.bintray.com/mobstac/maven"
+        }
+        …
+    }
+}
+```
+
 ### In the `build.gradle` file of the app, add the following in the dependencies section:
 
 ```groovy
 dependencies {
     …
-    implementation 'co.nearbee:nearbeesdk:2.0.2'
+    implementation 'co.nearbee:nearbeesdk:2.1.4'
 }
 ```
 
@@ -259,4 +272,45 @@ public class MyNotificationManager extends NotificationManager {
 <meta-data
     android:name="co.nearbee.notification_util"
     android:value=".MyNotificationManager" />
+```
+
+
+
+## Geofencing
+
+
+#### Start monitoring
+
+```java
+nearBee.startGeoFenceMonitoring().setSuccessListener(new SuccessListener<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        Log.d("NearBee GeoFence", "Setup success");
+    }
+}).setErrorListener(new ErrorListener() {
+    @Override
+    public void onError(Exception e) {
+        Log.d("NearBee GeoFence", "Setup failed");
+    }
+});
+```
+
+#### Stop monitoring
+```java
+nearBee.stopGeoFenceMonitoring().setSuccessListener(new SuccessListener<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        Log.d("NearBee GeoFence", "Removal success");
+    }
+}).setErrorListener(new ErrorListener() {
+    @Override
+    public void onError(Exception e) {
+        Log.d("NearBee GeoFence", "Removal failed");
+    }
+});
+```
+
+#### Check monitoring state
+```java
+boolean enabled = nearBee.isGeoFenceMonitoringEnabled();
 ```
