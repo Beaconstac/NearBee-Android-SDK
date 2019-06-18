@@ -274,8 +274,6 @@ public class MyNotificationManager extends NotificationManager {
     android:value=".MyNotificationManager" />
 ```
 
-
-
 ## Geofencing
 
 
@@ -366,3 +364,6 @@ public class MyGeoNotificationManager extends GeoNotificationManager {
     android:value=".MyGeoNotificationManager" />
 ```
 
+## Handle notifications manually
+
+By default the NearBee SDK displays the notifications. To disable this and take control of Beacon and GeoFence events follow [this guide](NotificationOverride.md).
