@@ -22,7 +22,7 @@ allprojects {
 ```groovy
 dependencies {
     …
-    implementation 'co.nearbee:nearbeesdk:2.1.5'
+    implementation 'co.nearbee:nearbeesdk:2.1.6'
 }
 ```
 
