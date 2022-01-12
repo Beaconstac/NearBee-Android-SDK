@@ -23,7 +23,7 @@ allprojects {
             dirs 'libs'
         }
         maven {
-            url  "https://dl.bintray.com/mobstac/maven"
+            url  "https://mobstac.jfrog.io/artifactory/beaconstacandroidsdk-gradle-release/"
         }
     }
 }
