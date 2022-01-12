@@ -10,7 +10,7 @@ allprojects {
     repositories {
         …
         maven {
-            url  "https://dl.bintray.com/mobstac/maven"
+            url  "https://mobstac.jfrog.io/artifactory/beaconstacandroidsdk-gradle-release/"
         }
         …
     }
@@ -22,14 +22,9 @@ allprojects {
 ```groovy
 dependencies {
     …
-    implementation 'co.nearbee:nearbeesdk:2.1.6'
+    implementation 'co.nearbee:nearbeesdk:2.1.30'
 }
 ```
-
-##### Latest version
-
-[ ![Download](https://api.bintray.com/packages/mobstac/maven/nearbeesdk/images/download.svg) ](https://bintray.com/mobstac/maven/nearbeesdk/_latestVersion) 
-
 
 ## Permissions
 #### NearBee requires the following permissions.
